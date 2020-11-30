@@ -1,0 +1,44 @@
+﻿@model JobBoard.DATA.EF.Application
+
+@{
+    ViewBag.Title = "Details";
+}
+<h2 style="color:black">
+    @Html.DisplayFor(model => model.UserDetail.FirstName) @Html.DisplayFor(model => model.UserDetail.LastName)
+</h2>
+<div>
+    <h5>
+        Position Title
+    </h5>
+    <p>
+        @Html.DisplayFor(model => model.OpenPosition.Position.Title)
+    </p>
+    <h5>
+        Date of Application
+    </h5>
+    <p>
+        @Html.DisplayFor(model => model.ApplicationDate)
+    </p>
+    <h5>
+        Resume Download
+    </h5>
+    <p>
+        <a href="../DownloadFile?filePath=model.ResumeFileName">Download</a>
+    </p>
+    <h5>
+        @Html.DisplayNameFor(model => model.ManagerNotes)
+    </h5>
+    <p>
+        @Html.DisplayFor(model => model.ManagerNotes)
+    </p>
+    <h5>
+        Status
+    </h5>
+    <p>
+        @Html.DisplayFor(model => model.ApplicationStatu.StatusName)
+    </p>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ApplicationId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

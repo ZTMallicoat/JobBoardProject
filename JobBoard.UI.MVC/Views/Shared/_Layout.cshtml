@@ -1,49 +1,72 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE HTML>
 <html>
 <head>
+    <title>@ViewBag.Title</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="~/Content/assets/css/main.css" />
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", null, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
 
-                    @if (Request.IsAuthenticated && User.IsInRole("Admin")) {
-                        <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
-                        <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
+    <!-- Header -->
+    <header id="header">
+        <div class="inner">
+            <a href="~/Views/Home/Index" class="logo">HirMe</a>
+            <nav>
+                <ul>
+                    <li>@Html.ActionLink("Home", "Index", "Home", null, null)</li>
+                    @if (!Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("About Us", "About", "Home", null, null)</li>
                     }
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+                    @if (User.IsInRole("Applicant") && Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Apply Here", "Index", "OpenPositions", null, null)</li>
+                    }
+                    @if (User.IsInRole("Manager") && Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Add Opening", "Create", "OpenPositions", null, null)</li>
+                    }
+                    @if (User.IsInRole("Manager") || User.IsInRole("Admin") && Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Open Positions", "Index", "OpenPositions", null, null)</li>
+                        <li>@Html.ActionLink("Positions", "Index", "Positions", null, null)</li>
+                    }
+                    @if (User.IsInRole("Admin") && Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("User Management", "index", "UsersAdmin", null, null)</li>
+                    }
+                    @if (User.IsInRole("Applicant") || User.IsInRole("Manager") || User.IsInRole("Admin") && Request.IsAuthenticated)
+                    {
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+                    }
+                    <li>@Html.Partial("_LoginPartial")</li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+    <main style="margin-left:15%;margin-right:15%;">
+        @RenderBody()
+    </main>
+    <!-- Footer -->
+    <section id="footer">
+                &copy;Zachary Thomas Mallicoat 2020
+    </section>
+
+    <!-- Scripts -->
+    <script src="~/Content/assets/js/jquery.min.js"></script>
+    <script src="~/Content/assets/js/skel.min.js"></script>
+    <script src="~/Content/assets/js/util.js"></script>
+    <script src="~/Content/assets/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#datepicker").datepicker();
+        });
+    </script>
+    @RenderSection("Scripts", required: false);
 </body>
 </html>

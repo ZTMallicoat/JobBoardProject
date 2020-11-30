@@ -1,4 +1,5 @@
-﻿using JobBoard.UI.MVC.Models;
+﻿using JobBoard.DATA.EF;
+using JobBoard.UI.MVC.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -151,13 +152,17 @@ namespace JobBoard.UI.MVC.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
+                UserManager.AddToRole(user.Id, "Applicant");
                 if (result.Succeeded)
                 {
-                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
-                    ViewBag.Link = callbackUrl;
-                    return View("DisplayEmail");
+                    UserDetailsController newUserDeets = new UserDetail();
+                    newUserDeets.UserId = user.Id;
+                    newUserDeets.FirstName = model.FirstName;
+                    newUserDeets.LastName = model.LastName;
+                    JobBoardEntities db = new JobBoardEntities();
+                    db.UserDetails.Add(newUserDeets);
+                    db.SaveChanges();
+                    return View("Login");
                 }
                 AddErrors(result);
             }

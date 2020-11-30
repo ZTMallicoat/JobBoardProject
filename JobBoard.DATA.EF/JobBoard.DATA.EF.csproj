@@ -74,6 +74,7 @@
     <Compile Include="Location.cs">
       <DependentUpon>JobBoardModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="JobBoardMetadata.cs" />
     <Compile Include="OpenPosition.cs">
       <DependentUpon>JobBoardModel.tt</DependentUpon>
     </Compile>
@@ -96,7 +97,9 @@
     <None Include="JobBoardModel.edmx.diagram">
       <DependentUpon>JobBoardModel.edmx</DependentUpon>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="JobBoardModel.Context.tt">
@@ -113,5 +116,6 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -25,6 +26,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -168,10 +170,16 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ApplicationsController.cs" />
+    <Compile Include="Controllers\ApplicationStatusController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OpenPositionsController.cs" />
+    <Compile Include="Controllers\PositionsController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
+    <Compile Include="Controllers\UserDetailsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -183,6 +191,11 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\assets\js\cors\jquery.postmessage-transport.js" />
+    <Content Include="Content\assets\js\cors\jquery.xdr-transport.js" />
+    <Content Include="Content\assets\js\demo.js" />
+    <Content Include="Content\assets\js\jquery.iframe-transport.js" />
+    <Content Include="Content\assets\js\vendor\jquery.ui.widget.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -193,6 +206,48 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\assets\css\font-awesome.min.css" />
+    <Content Include="Content\assets\css\main.css" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\assets\js\jquery.min.js" />
+    <Content Include="Content\assets\js\main.js" />
+    <Content Include="Content\assets\js\skel.min.js" />
+    <Content Include="Content\assets\js\util.js" />
+    <Content Include="Scripts\jquery.filedrop.js" />
+    <Content Include="_Archive\assets\css\font-awesome.min.css" />
+    <Content Include="_Archive\assets\css\main.css" />
+    <Content Include="_Archive\assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="_Archive\assets\js\jquery.min.js" />
+    <Content Include="_Archive\assets\js\main.js" />
+    <Content Include="_Archive\assets\js\skel.min.js" />
+    <Content Include="_Archive\assets\js\util.js" />
+    <Content Include="_Archive\elements.html" />
+    <Content Include="_Archive\generic.html" />
+    <Content Include="Content\images\banner.jpg" />
+    <Content Include="Content\images\pic01.jpg" />
+    <Content Include="Content\images\pic02.jpg" />
+    <Content Include="Content\images\pic03.jpg" />
+    <Content Include="Content\images\pic04.jpg" />
+    <Content Include="Content\images\pic05.jpg" />
+    <Content Include="Content\images\pic06.jpg" />
+    <Content Include="Content\images\pic07.jpg" />
+    <Content Include="Content\images\pic08.jpg" />
+    <Content Include="Content\images\pic09.jpg" />
+    <Content Include="Content\images\pic10.jpg" />
+    <Content Include="Content\images\pic11.jpg" />
+    <Content Include="_Archive\images\banner.jpg" />
+    <Content Include="_Archive\images\pic01.jpg" />
+    <Content Include="_Archive\images\pic02.jpg" />
+    <Content Include="_Archive\images\pic03.jpg" />
+    <Content Include="_Archive\images\pic04.jpg" />
+    <Content Include="_Archive\images\pic05.jpg" />
+    <Content Include="_Archive\images\pic06.jpg" />
+    <Content Include="_Archive\images\pic07.jpg" />
+    <Content Include="_Archive\images\pic08.jpg" />
+    <Content Include="_Archive\images\pic09.jpg" />
+    <Content Include="_Archive\images\pic10.jpg" />
+    <Content Include="_Archive\images\pic11.jpg" />
+    <Content Include="_Archive\index.html" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -251,9 +306,50 @@
     <Content Include="Views\RolesAdmin\Delete.cshtml" />
     <Content Include="Views\RolesAdmin\Create.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
+    <Content Include="Views\UserDetails\Create.cshtml" />
+    <Content Include="Views\UserDetails\Delete.cshtml" />
+    <Content Include="Views\UserDetails\Details.cshtml" />
+    <Content Include="Views\UserDetails\Edit.cshtml" />
+    <Content Include="Views\UserDetails\Index.cshtml" />
+    <Content Include="Views\Locations\Create.cshtml" />
+    <Content Include="Views\Locations\Delete.cshtml" />
+    <Content Include="Views\Locations\Details.cshtml" />
+    <Content Include="Views\Locations\Edit.cshtml" />
+    <Content Include="Views\Locations\Index.cshtml" />
+    <Content Include="Views\Positions\Create.cshtml" />
+    <Content Include="Views\Positions\Delete.cshtml" />
+    <Content Include="Views\Positions\Details.cshtml" />
+    <Content Include="Views\Positions\Edit.cshtml" />
+    <Content Include="Views\Positions\Index.cshtml" />
+    <Content Include="Views\OpenPositions\Create.cshtml" />
+    <Content Include="Views\OpenPositions\Delete.cshtml" />
+    <Content Include="Views\OpenPositions\Details.cshtml" />
+    <Content Include="Views\OpenPositions\Edit.cshtml" />
+    <Content Include="Views\OpenPositions\Index.cshtml" />
+    <Content Include="Views\ApplicationStatus\Create.cshtml" />
+    <Content Include="Views\ApplicationStatus\Delete.cshtml" />
+    <Content Include="Views\ApplicationStatus\Details.cshtml" />
+    <Content Include="Views\ApplicationStatus\Edit.cshtml" />
+    <Content Include="Views\ApplicationStatus\Index.cshtml" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\assets\fonts\FontAwesome.otf" />
+    <Content Include="_Archive\assets\fonts\fontawesome-webfont.eot" />
+    <Content Include="_Archive\assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="_Archive\assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="_Archive\assets\fonts\fontawesome-webfont.woff2" />
+    <Content Include="_Archive\assets\fonts\FontAwesome.otf" />
+    <Content Include="Views\Applications\Create.cshtml" />
+    <Content Include="Views\Applications\Delete.cshtml" />
+    <Content Include="Views\Applications\Details.cshtml" />
+    <Content Include="Views\Applications\Edit.cshtml" />
+    <Content Include="Views\Applications\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="UploadedFiles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -274,11 +370,15 @@
       <Name>JobBoard.DATA.EF</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">

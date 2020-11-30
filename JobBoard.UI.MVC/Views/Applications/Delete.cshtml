@@ -1,0 +1,55 @@
+﻿@model JobBoard.DATA.EF.Application
+
+@{
+    ViewBag.Title = "Delete";
+}
+<div>
+    <h3>Are you sure you would like to delete this application?</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <h5>
+            Applicant
+        </h5>
+        <p>
+            @Html.DisplayFor(model => model.UserDetail.FirstName) @Html.DisplayFor(model=>model.UserDetail.LastName)
+        </p>
+        <h5>
+            Job Title
+        </h5>
+        <p>
+            @Html.DisplayFor(model => model.OpenPosition.Position.Title)
+        </p>
+        <h5>
+            @Html.DisplayNameFor(model => model.ApplicationDate)
+        </h5>
+
+        <p>
+            @Html.DisplayFor(model => model.ApplicationDate)
+        </p>
+        <h5>
+            @Html.DisplayNameFor(model => model.ApplicationStatu.StatusName)
+        </h5>
+        <p>
+            @Html.DisplayFor(model => model.ApplicationStatu.StatusName)
+        </p>
+         @if (Model.ManagerNotes == null) { }
+         else
+         {
+        <h5>
+            @Html.DisplayNameFor(model => model.ManagerNotes)
+        </h5>
+        <p>
+            @Html.DisplayFor(model => model.ManagerNotes)
+        </p>
+         }
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
