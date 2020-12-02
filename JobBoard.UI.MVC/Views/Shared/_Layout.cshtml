@@ -32,7 +32,7 @@
                     }
                     @if (User.IsInRole("Manager") || User.IsInRole("Admin") && Request.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("Applicantions","Index","Applications",null,null)</li>
+                        <li>@Html.ActionLink("Applications","Index","Applications",null,null)</li>
                         <li>@Html.ActionLink("Open Positions", "Index", "OpenPositions", null, null)</li>
                         <li>@Html.ActionLink("Positions", "Index", "Positions", null, null)</li>
                     }
