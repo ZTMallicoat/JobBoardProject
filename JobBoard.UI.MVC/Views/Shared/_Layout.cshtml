@@ -6,20 +6,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="~/Content/assets/css/main.css" />
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+    </style>
 </head>
 <body>
 
     <!-- Header -->
     <header id="header">
-        <div class="inner">
+        <div class="inner" style="height:20px">
             <a href="~/Views/Home/Index" class="logo">HirMe</a>
-            <nav>
+            <nav id="nav">
                 <ul>
                     <li>@Html.ActionLink("Home", "Index", "Home", null, null)</li>
-                    @if (!Request.IsAuthenticated)
-                    {
-                        <li>@Html.ActionLink("About Us", "About", "Home", null, null)</li>
-                    }
+                    <li>@Html.ActionLink("Contact Us", "Contact", "Home", null, null)</li>
                     @if (User.IsInRole("Applicant") && Request.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Apply Here", "Index", "OpenPositions", null, null)</li>
@@ -30,16 +32,15 @@
                     }
                     @if (User.IsInRole("Manager") || User.IsInRole("Admin") && Request.IsAuthenticated)
                     {
+                        <li>@Html.ActionLink("Applicantions","Index","Applications",null,null)</li>
                         <li>@Html.ActionLink("Open Positions", "Index", "OpenPositions", null, null)</li>
                         <li>@Html.ActionLink("Positions", "Index", "Positions", null, null)</li>
                     }
                     @if (User.IsInRole("Admin") && Request.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("User Management", "index", "UsersAdmin", null, null)</li>
-                    }
-                    @if (User.IsInRole("Applicant") || User.IsInRole("Manager") || User.IsInRole("Admin") && Request.IsAuthenticated)
-                    {
-
+                        <li>@Html.ActionLink("Users", "index", "UsersAdmin", null, null)</li>
+                        <li>@Html.ActionLink("Roles", "index", "RolesAdmin", null, null)</li>
+                        <li>@Html.ActionLink("Locations","index","Locations",null,null)</li>
                     }
                     <li>@Html.Partial("_LoginPartial")</li>
                 </ul>
@@ -51,16 +52,15 @@
         @RenderBody()
     </main>
     <!-- Footer -->
-    <section id="footer">
-                &copy;Zachary Thomas Mallicoat 2020
-    </section>
+    <footer id="footer" style="height:4%;position:fixed;bottom:0;width:100%;padding-top:0">
+        &copy;Zachary Thomas Mallicoat 2020
+    </footer>
 
     <!-- Scripts -->
     <script src="~/Content/assets/js/jquery.min.js"></script>
     <script src="~/Content/assets/js/skel.min.js"></script>
     <script src="~/Content/assets/js/util.js"></script>
     <script src="~/Content/assets/js/main.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         $(function () {

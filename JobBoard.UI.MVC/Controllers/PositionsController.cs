@@ -15,12 +15,14 @@ namespace JobBoard.UI.MVC.Controllers
         private JobBoardEntities db = new JobBoardEntities();
 
         // GET: Positions
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Index()
         {
             return View(db.Positions.ToList());
         }
 
         // GET: Positions/Details/5
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,6 +38,7 @@ namespace JobBoard.UI.MVC.Controllers
         }
 
         // GET: Positions/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -44,6 +47,7 @@ namespace JobBoard.UI.MVC.Controllers
         // POST: Positions/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "PositionId,Title,JobDescription")] Position position)
@@ -59,6 +63,7 @@ namespace JobBoard.UI.MVC.Controllers
         }
 
         // GET: Positions/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -76,6 +81,7 @@ namespace JobBoard.UI.MVC.Controllers
         // POST: Positions/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "PositionId,Title,JobDescription")] Position position)
@@ -90,6 +96,7 @@ namespace JobBoard.UI.MVC.Controllers
         }
 
         // GET: Positions/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -105,6 +112,7 @@ namespace JobBoard.UI.MVC.Controllers
         }
 
         // POST: Positions/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

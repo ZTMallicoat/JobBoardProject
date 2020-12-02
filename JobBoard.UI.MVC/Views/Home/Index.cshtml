@@ -43,41 +43,54 @@
 @if (User.IsInRole("Manager") || User.IsInRole("Admin") && Request.IsAuthenticated)
 {
     <!-- Two -->
-    <section id="two">
-        <div class="inner">
-            <article>
-                <div class="content">
-                    <header>
-                        <h3>Manager Access</h3>
-                    </header>
-                    <div class="image fit">
-                        <a href="../OpenPositions/Index.cshtml" class="button">Open Positions</a>
-                    </div>
-                    <p>You are a manager or admin so you can see this!</p>
-                </div>
-            </article>
-            @if (User.IsInRole("Admin") && Request.IsAuthenticated)
-            {
-
-                <article class="alt">
+    if (User.IsInRole("Admin") && Request.IsAuthenticated)
+    {
+        <section id="two" style="text-align:center;background:lightgrey">
+            <div>
+                <article>
                     <div class="content">
                         <header>
-                            <h3>Morbi interdum mol</h3>
+                            <h3>Manager Access</h3>
                         </header>
+                        <p>Here you can view open positions and submit new ones.</p>
                         <div class="image fit">
-                            <img src="images/pic02.jpg" alt="" />
+                            <a href="../OpenPositions/Index" class="button">Open Positions</a>
                         </div>
-                        <p>You are an Admin so you can see this</p>
                     </div>
                 </article>
-            }
-        </div>
-    </section>
+                <article class="alt">
+                    <div class="content">
+                        <header style="margin-top:12%">
+                            <h3>User Management</h3>
+                        </header>
+                        <div class="image fit">
+                            <a href="../UsersAdmin/Index" class="button">Users</a>
+                            <a href="../RolesAdmin/Index" class="button">Roles</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    }
+    else
+    {
+        <section id="one" style="text-align:center;background:lightgrey">
+            <div>
+                <header>
+                    <h3>Manager Access</h3>
+                </header>
+                <p>Here you can view open positions at your locations and submit new ones.</p>
+                <div class="image fit">
+                    <a href="../OpenPositions/Index" class="button">Open Positions</a>
+                </div>
+            </div>
+        </section>
+    }
 }
 
 <!-- Three -->
 <section id="three">
-    <div class="inner">
+    <div class="inner" style="margin-bottom:10%">
         <article>
             <div class="content">
                 <span class="icon fa-laptop"></span>

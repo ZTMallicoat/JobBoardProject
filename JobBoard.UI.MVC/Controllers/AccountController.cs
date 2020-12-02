@@ -152,10 +152,10 @@ namespace JobBoard.UI.MVC.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
-                UserManager.AddToRole(user.Id, "Applicant");
                 if (result.Succeeded)
                 {
-                    UserDetailsController newUserDeets = new UserDetail();
+                UserManager.AddToRole(user.Id, "Applicant");
+                    UserDetail newUserDeets = new UserDetail();
                     newUserDeets.UserId = user.Id;
                     newUserDeets.FirstName = model.FirstName;
                     newUserDeets.LastName = model.LastName;

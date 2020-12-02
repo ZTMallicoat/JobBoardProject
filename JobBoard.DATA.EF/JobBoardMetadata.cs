@@ -25,9 +25,6 @@ namespace JobBoard.DATA.EF
             [Required(ErrorMessage = "Field is Required.")]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
-            [StringLength(75, ErrorMessage = "File path must be 75 characters or less.")]
-            [Display(Name = "Resume File")]
-            public string ResumeFileName { get; set; }
         }
     }
     [MetadataType(typeof(PositionsMetadata))]
@@ -68,6 +65,8 @@ namespace JobBoard.DATA.EF
     {
         public class ApplicationsMetadata
         {
+            [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
+            public DateTime ApplicationDate { get; set; }
             [Display(Name = "Application ID")]
             public int ApplicationId { get; set; }
             [Display(Name = "Open Position ID")]

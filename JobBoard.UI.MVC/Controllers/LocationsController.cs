@@ -15,6 +15,7 @@ namespace JobBoard.UI.MVC.Controllers
         private JobBoardEntities db = new JobBoardEntities();
 
         // GET: Locations
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Index()
         {
             var locations = db.Locations.Include(l => l.UserDetail);
@@ -22,6 +23,7 @@ namespace JobBoard.UI.MVC.Controllers
         }
 
         // GET: Locations/Details/5
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,6 +39,7 @@ namespace JobBoard.UI.MVC.Controllers
         }
 
         // GET: Locations/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             ViewBag.ManagerId = new SelectList(db.UserDetails, "UserId", "FirstName");
@@ -46,6 +49,7 @@ namespace JobBoard.UI.MVC.Controllers
         // POST: Locations/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "LocationId,StoreNumber,City,State,ManagerId")] Location location)
@@ -62,6 +66,7 @@ namespace JobBoard.UI.MVC.Controllers
         }
 
         // GET: Locations/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -80,6 +85,7 @@ namespace JobBoard.UI.MVC.Controllers
         // POST: Locations/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "LocationId,StoreNumber,City,State,ManagerId")] Location location)
@@ -94,6 +100,7 @@ namespace JobBoard.UI.MVC.Controllers
             return View(location);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Locations/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -110,6 +117,7 @@ namespace JobBoard.UI.MVC.Controllers
         }
 
         // POST: Locations/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

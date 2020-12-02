@@ -7,14 +7,16 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using JobBoard.DATA.EF;
-
+using Microsoft.AspNet.Identity;
 namespace JobBoard.UI.MVC.Controllers
 {
     public class ApplicationsController : Controller
     {
         private JobBoardEntities db = new JobBoardEntities();
 
+
         // GET: Applications
+        [Authorize(Roles = "Admin,Manager")]
         public ActionResult Index()
         {
             var applications = db.Applications.Include(a => a.ApplicationStatu).Include(a => a.OpenPosition).Include(a => a.UserDetail);
@@ -22,6 +24,7 @@ namespace JobBoard.UI.MVC.Controllers
         }
 
         // GET: Applications/Details/5
+        [Authorize(Roles = "Admin,Manager,Applicant")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,7 +40,7 @@ namespace JobBoard.UI.MVC.Controllers
         }
         public ActionResult DownloadFile(string filePath)
         {
-            string fullName = Server.MapPath("~/UploadedFiles/" + filePath);
+            string fullName = Server.MapPath("~/Content/UploadedFiles/" + filePath);
 
             byte[] fileBytes = GetFile(fullName);
             return File(
@@ -54,23 +57,26 @@ namespace JobBoard.UI.MVC.Controllers
             return data;
         }
         // GET: Applications/Create
-        public ActionResult Create()
+        [Authorize(Roles = "Admin, Manager, Applicant")]
+        public ActionResult Create(int id)
         {
             ViewBag.ApplicationStatusId = new SelectList(db.ApplicationStatus, "ApplicationStatusId", "StatusName");
-            ViewBag.OpenPositionId = new SelectList(db.OpenPositions, "OpenPositionId", "OpenPositionId");
+            ViewBag.OpenPositionId = new SelectList(db.OpenPositions, "OpenPositionId", "OpenPositionId", id);
             ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FirstName");
+
             return View();
         }
 
         // POST: Applications/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Manager, Applicant")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ApplicationId,OpenPositionId,UserId,ApplicationDate,ManagerNotes,ApplicationStatusId,ResumeFileName")] Application application, HttpPostedFileBase ResumeFile)
         {
-                var controller = DependencyResolver.Current.GetService<OpenPositionsController>();
-                controller.ControllerContext = new ControllerContext(this.Request.RequestContext, controller);
+            var controller = DependencyResolver.Current.GetService<OpenPositionsController>();
+            controller.ControllerContext = new ControllerContext(this.Request.RequestContext, controller);
             if (ModelState.IsValid)
             {
                 string fileName = "null.pdf";
@@ -79,19 +85,20 @@ namespace JobBoard.UI.MVC.Controllers
 
                     fileName = ResumeFile.FileName;
                     string ext = fileName.Substring(fileName.LastIndexOf('.'));
-                    string[] goodExts = { ".pdf" };
-                    if (goodExts.Contains(ext.ToLower()) && (ResumeFile.ContentLength <= 4194304))
+                    string[] goodExt = { ".pdf" };
+                    if (goodExt.Contains(ext.ToLower()) && (ResumeFile.ContentLength <= 4194304))
                     {
                         fileName = Guid.NewGuid() + ext;
-                        ResumeFile.SaveAs(Server.MapPath("~/UploadedFiles/" + fileName));
+                        ResumeFile.SaveAs(Server.MapPath("~/Content/UploadedFiles/" + fileName));
                     }
                 }
-                int FromOpPos=1;
                 application.ResumeFileName = fileName;
-                application.OpenPositionId = FromOpPos;
+                application.ApplicationDate = DateTime.Now;
+                application.ApplicationStatusId = 1;
+                application.UserId = User.Identity.GetUserId();
                 db.Applications.Add(application);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
 
             ViewBag.ApplicationStatusId = new SelectList(db.ApplicationStatus, "ApplicationStatusId", "StatusName", application.ApplicationStatusId);
@@ -101,6 +108,7 @@ namespace JobBoard.UI.MVC.Controllers
         }
 
         // GET: Applications/Edit/5
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -121,6 +129,7 @@ namespace JobBoard.UI.MVC.Controllers
         // POST: Applications/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ApplicationId,OpenPositionId,UserId,ApplicationDate,ManagerNotes,ApplicationStatusId,ResumeFileName")] Application application)
@@ -138,6 +147,7 @@ namespace JobBoard.UI.MVC.Controllers
         }
 
         // GET: Applications/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -153,11 +163,16 @@ namespace JobBoard.UI.MVC.Controllers
         }
 
         // POST: Applications/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             Application application = db.Applications.Find(id);
+            if (application.ResumeFileName != null && application.ResumeFileName != "null.pdf")
+            {
+                System.IO.File.Delete(Server.MapPath("~/Content/UploadedFiles/" + application.ResumeFileName));
+            }
             db.Applications.Remove(application);
             db.SaveChanges();
             return RedirectToAction("Index");

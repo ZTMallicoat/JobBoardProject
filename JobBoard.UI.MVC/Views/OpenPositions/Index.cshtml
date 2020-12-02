@@ -5,49 +5,64 @@
 }
 
 <h2>@ViewBag.Title</h2>
-<p>
-    <!--Solves issue where first link on page doesn't work -->
-    <a href="emptyRoute"></a><br />
-    <a href="../Positions/Index">All</a>|Open
-</p>
-@foreach (var item in Model)
+@if (User.IsInRole("Admin") || User.IsInRole("Manager") && Request.IsAuthenticated)
 {
-    if (User.IsInRole("Admin") || User.IsInRole("Manager") && Request.IsAuthenticated)
-    {
-        <h3>Store Number</h3>
-        <p>
-            @Html.DisplayFor(modelItem => item.Location.StoreNumber)
-        </p>
-        <h3>Job Title</h3>
-        <p>
-            @Html.DisplayFor(modelItem => item.Position.Title)
-        </p>
-        <h3>Job Description</h3>
-        <p>
-            @Html.DisplayFor(modelItem => item.Position.JobDescription)
-        </p>
-        <p>
-            @Html.ActionLink("Edit", "Edit", new { id = item.OpenPositionId }) |
-            @Html.ActionLink("Details", "Details", new { id = item.OpenPositionId }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.OpenPositionId })
-        </p>
-    }
-    if (User.IsInRole("Applicant") && Request.IsAuthenticated)
-    {
-        <div style="width:25%;border:2px grey solid;text-align:center;display:inline-block;">
-
-            <h3>
-                @Html.DisplayFor(modelItem => item.Position.Title)
-            </h3>
-            <p>
-                @Html.DisplayFor(modelItem => item.Position.JobDescription)
-            </p>
-            <p>
-                <strong>
-                    @Html.DisplayFor(modelItem => item.Location.City), @Html.DisplayFor(modelItem => item.Location.State)
-                </strong>
-            </p>
-            <a href="" class="button special small" style="margin-bottom:1%">Apply Now</a>
-        </div>
-    }
+    <p>
+        <a href="../Positions/Index">All</a>|Open
+    </p>
 }
+@if (User.IsInRole("Admin") && Request.IsAuthenticated)
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
+
+<div style="text-align:center;">
+    @foreach (var item in Model)
+    {
+        if (User.IsInRole("Admin") || User.IsInRole("Manager") && Request.IsAuthenticated)
+        {
+            <div style="text-align:center;margin-bottom:10%;padding:2%;border:grey 1px solid;display:inline-block">
+
+                <h3>Store Number</h3>
+                <p>
+                    @Html.DisplayFor(modelItem => item.Location.StoreNumber)
+                </p>
+                <h3>Job Title</h3>
+                <p>
+                    @Html.DisplayFor(modelItem => item.Position.Title)
+                </p>
+                <h3>Job Description</h3>
+                <p>
+                    @Html.DisplayFor(modelItem => item.Position.JobDescription)
+                </p>
+                <p>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.OpenPositionId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.OpenPositionId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.OpenPositionId })
+                </p>
+            </div>
+        }
+        if (User.IsInRole("Applicant") && Request.IsAuthenticated)
+        {
+            <div style="width:25%;border:2px grey solid;text-align:center;display:inline-block;">
+
+                <h3>
+                    @Html.DisplayFor(modelItem => item.Position.Title)
+                </h3>
+                <p>
+                    @Html.DisplayFor(modelItem => item.Position.JobDescription)
+                </p>
+                <p>
+                    <strong>
+                        @Html.DisplayFor(modelItem => item.Location.City), @Html.DisplayFor(modelItem => item.Location.State)
+                    </strong>
+                </p>
+                <h4>
+                    @Html.ActionLink("Apply Now", "Create", "Applications", new { id = item.OpenPositionId }, null)
+                </h4>
+            </div>
+        }
+    }
+</div>

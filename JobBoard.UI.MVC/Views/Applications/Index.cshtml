@@ -1,44 +1,63 @@
 ﻿@model IEnumerable<JobBoard.DATA.EF.Application>
 
 @{
-    ViewBag.Title = "Applicants";
+    ViewBag.Title = "Applications";
 }
 
 <h2>@ViewBag.Title</h2>
 
 <table class="table">
     <tr>
-        <th>Applicant</th>
+        @if (!User.IsInRole("Applicant"))
+        {
+            <th>Applicant</th>
+        }
         <th>Position Title</th>
         <th>Date of Application</th>
         <th>Application Status</th>
-        <th>Notes</th>
-        <th></th>
+        @if (!User.IsInRole("Applicant"))
+        {
+            <th>Notes</th>
+        }
+        @if (User.IsInRole("Admin") || User.IsInRole("Manager") && Request.IsAuthenticated)
+        {
+            <th></th>
+        }
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.UserDetail.FirstName) @Html.DisplayFor(modelItem=>item.UserDetail.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OpenPosition.Position.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApplicationDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApplicationStatu.StatusName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ManagerNotes)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ApplicationId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ApplicationId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ApplicationId })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            @if (!User.IsInRole("Applicant"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserDetail.FirstName) @Html.DisplayFor(modelItem => item.UserDetail.LastName)
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.OpenPosition.Position.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationStatu.StatusName)
+            </td>
+            @if (!User.IsInRole("Applicant"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.ManagerNotes)
+                </td>
+            }
+            @if (User.IsInRole("Admin") || User.IsInRole("Manager") && Request.IsAuthenticated)
+            {
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ApplicationId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ApplicationId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ApplicationId })
+                </td>
+            }
+        </tr>
+    }
 
 </table>
